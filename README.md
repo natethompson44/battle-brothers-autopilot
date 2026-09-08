@@ -50,7 +50,7 @@ mod_msu_1.9.0.zip             MSU
 mod_stdlib_2.6.zip            stdlib (the Nexus file is named stdlib_2.6.zip; either name works)
 mod_autopilot_new_2.9.0.zip   Autopilot New
 mod_autopilot_expert_1.0.9.zip
-mod_levelup_pilot_1.1.0.zip
+mod_levelup_pilot_1.1.1.zip
 ```
 
 If the game shows a red Modern Hooks screen mentioning `stdlib`, `mod_autopilot_new` or `mod_msu`,
@@ -63,15 +63,16 @@ The game log is `Documents\Battle Brothers\log.html` on Windows. On Steam Deck u
 
 ## Required mods (download from their authors)
 
-Install these alongside ours. They are not included in this repo.
+Install these alongside ours. stdlib and Autopilot New are BSD-licensed and unmodified builds of
+them ship in `third_party/` (license included); the rest come from their authors.
 
 | Mod | Needed by | Where |
 |---|---|---|
 | Modding Script Hooks (mod_hooks) | stdlib | https://www.nexusmods.com/battlebrothers/mods/42 |
 | Modern Hooks | everything | https://www.nexusmods.com/battlebrothers/mods/685 |
 | MSU (Modding Standards & Utilities) | everything | https://www.nexusmods.com/battlebrothers/mods/479 |
-| stdlib | Autopilot New, Autopilot Expert | https://www.nexusmods.com/battlebrothers/mods/676 |
-| Autopilot New | Autopilot Expert | https://www.nexusmods.com/battlebrothers/mods/675 |
+| stdlib | Autopilot New, Autopilot Expert | `third_party/mod_stdlib_2.6.zip` or https://www.nexusmods.com/battlebrothers/mods/676 |
+| Autopilot New | Autopilot Expert | `third_party/mod_autopilot_new_2.9.0.zip` or https://www.nexusmods.com/battlebrothers/mods/675 |
 | Legends (optional) + Legends assets | optional for both | https://www.nexusmods.com/battlebrothers/mods/60 |
 
 Note: with Legends installed you do not need mod_hooks separately (Legends bundles it). Without
