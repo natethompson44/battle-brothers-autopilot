@@ -9,7 +9,53 @@ pick fights, and live with the outcome.
 | **Level-Up Pilot** | Spends attribute points and perk points automatically with role-based builds. Vanilla-first; uses Legends' perk trees when Legends is present. | `mod_levelup_pilot_<version>.zip` |
 
 Each mod's folder has its own README with settings. Source is in the folders; the zips at the
-repo root are the installable builds. Drop zips into the game's `data` folder.
+repo root are the installable builds.
+
+## Installing
+
+Copy the two `mod_*.zip` files from the repo root into the game's `data` folder, as they are, next
+to the required mods below. Do **not** put the GitHub "Download ZIP" of the whole repo in `data`:
+it wraps everything in a `battle-brothers-autopilot-main/` folder, so the game finds no
+`scripts/` at the zip root and silently ignores it.
+
+Where `data` is:
+
+| Platform | Path |
+|---|---|
+| Windows | `C:\Program Files (x86)\Steam\steamapps\common\Battle Brothers\data` |
+| Steam Deck / Linux (internal drive) | `~/.local/share/Steam/steamapps/common/Battle Brothers/data` |
+| Steam Deck (SD card) | `/run/media/mmcblk0p1/steamapps/common/Battle Brothers/data` |
+
+**Steam Deck / Linux shortcut:** in Desktop Mode open Konsole in the repo folder and run
+`bash tools/deck_install.sh`. It finds the data folder, downloads Modding Script Hooks, Modern Hooks
+and MSU from their GitHub releases, copies our two zips, and tells you if stdlib or Autopilot New
+still need to be added from Nexus (those two are only distributed there).
+
+**If you previously ran with Legends and removed it:** Legends bundles Modding Script Hooks
+(mod_hooks). stdlib's preload runs before Modern Hooks is loaded, so without mod_hooks it never
+registers and every mod that requires stdlib fails with a big red error. Add mod_hooks back. It is
+on Nexus (mod 42) and mirrored at
+https://github.com/jcsato/modding_script_hooks/releases/latest.
+
+A working vanilla install has all of these in `data` (versions may differ):
+
+```
+mod_hooks_21.1.zip            Modding Script Hooks
+mod_modern_hooks_0.6.0.zip    Modern Hooks
+mod_msu_1.9.0.zip             MSU
+mod_stdlib_2.6.zip            stdlib (the Nexus file is named stdlib_2.6.zip; either name works)
+mod_autopilot_new_2.9.0.zip   Autopilot New
+mod_autopilot_expert_1.0.9.zip
+mod_levelup_pilot_1.1.0.zip
+```
+
+If the game shows a red Modern Hooks screen mentioning `stdlib`, `mod_autopilot_new` or `mod_msu`,
+one of the mods in that list is missing from `data` or is too old for the version our mods ask for.
+The requirements are checked by name, so a nested zip (a zip inside the zip you downloaded) or a
+zip with the mod's files under an extra top-level folder counts as missing.
+
+The game log is `Documents\Battle Brothers\log.html` on Windows. On Steam Deck under Proton it is
+`~/.local/share/Steam/steamapps/compatdata/365360/pfx/drive_c/users/steamuser/Documents/Battle Brothers/log.html`.
 
 ## Required mods (download from their authors)
 
@@ -32,6 +78,8 @@ Legends you do, or stdlib fails to register.
 - `tools/battle_report.py` - turns the game's `log.html` into a per-fight report. `--last` prints the
   most recent fight turn by turn.
 - `tools/switch_mods.py vanilla|legends|status` - swaps the game's data folder between the two mod
-  sets (expects the third-party zips next to this README).
+  sets (Windows; expects the third-party zips next to this README).
+- `tools/deck_install.sh [data-folder]` - Steam Deck / Linux: downloads the GitHub-hosted
+  dependencies into the data folder and installs our two mods.
 
 
