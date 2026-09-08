@@ -47,6 +47,6 @@ this.wolfeo_hunt_scenario <- this.inherit("scripts/scenarios/world/starting_scen
 
 	function onSpawnPlayer()
 	{
-		::WolfeoStarts.spawnNearVillage(this);
+		::WolfeoStarts.spawnNearVillage(this, "event.wolfeo_hunt_intro");
 	}
 });

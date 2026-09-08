@@ -4,7 +4,7 @@
 local def = ::WolfeoStarts <- {
     ID = "mod_company_starts"
     Name = "Company Starts"
-    Version = "1.0.1"
+    Version = "1.0.2"
 }
 ::Hooks.register(def.ID, def.Version, def.Name);
 
@@ -167,7 +167,7 @@ def.makeWolfeo <- function (_scenario, _bro) {
 }
 
 // Spawn on a road tile next to a decent village. Same approach as the stock scenarios.
-def.spawnNearVillage <- function (_s) {
+def.spawnNearVillage <- function (_s, _introEvent = null) {
     local village = null;
     foreach (v in ::World.EntityManager.getSettlements()) {
         if (!v.isIsolatedFromRoads() && v.getSize() >= 2 && (!("isSouthern" in v) || !v.isSouthern())) {
@@ -191,4 +191,14 @@ def.spawnNearVillage <- function (_s) {
     ::World.State.m.Player = ::World.spawnEntity("scripts/entity/world/player_party", spawn.Coords.X, spawn.Coords.Y);
     ::World.Assets.updateLook(6);
     ::World.getCamera().setPos(::World.State.m.Player.getPos());
+
+    // Same as the stock origins: a beat later, start the music and fire the intro event. Closing
+    // the event is what hands the world clock back to the player.
+    ::Time.scheduleEvent(::TimeUnit.Real, 1000, function ( _tag )
+    {
+        local tracks = ("CivilianTracks" in ::Const.Music) ? ::Const.Music.CivilianTracks : ::Const.Music.WorldmapTracks;
+        ::Music.setTrackList(tracks, ::Const.Music.CrossFadeTime);
+        if (_tag.event != null) ::World.Events.fire(_tag.event);
+        else ::World.State.setPause(false);
+    }, {event = _introEvent});
 }

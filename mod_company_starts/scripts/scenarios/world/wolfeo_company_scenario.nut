@@ -56,6 +56,6 @@ this.wolfeo_company_scenario <- this.inherit("scripts/scenarios/world/starting_s
 
 	function onSpawnPlayer()
 	{
-		::WolfeoStarts.spawnNearVillage(this);
+		::WolfeoStarts.spawnNearVillage(this, "event.wolfeo_company_intro");
 	}
 });
