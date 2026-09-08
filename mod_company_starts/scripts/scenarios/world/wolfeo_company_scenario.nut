@@ -11,7 +11,7 @@ this.wolfeo_company_scenario <- this.inherit("scripts/scenarios/world/starting_s
 		this.m.Difficulty = 1;
 		this.m.Order = 5;
 		this.m.IsFixedLook = true;
-		this.m.StartingBusinessReputation = 500;
+		this.m.StartingBusinessReputation <- 500;
 		if ("StartingRosterTier" in this.m && ("Roster" in this.Const) && ("getTierForSize" in this.Const.Roster))
 		{
 			this.m.StartingRosterTier = this.Const.Roster.getTierForSize(12);
@@ -19,7 +19,7 @@ this.wolfeo_company_scenario <- this.inherit("scripts/scenarios/world/starting_s
 		}
 		if ("setRosterReputationTiers" in this && ("Roster" in this.Const) && ("createReputationTiers" in this.Const.Roster))
 		{
-			this.setRosterReputationTiers(this.Const.Roster.createReputationTiers(this.m.StartingBusinessReputation));
+			this.setRosterReputationTiers(this.Const.Roster.createReputationTiers(500));
 		}
 	}
 
@@ -43,7 +43,7 @@ this.wolfeo_company_scenario <- this.inherit("scripts/scenarios/world/starting_s
 		W.makeCompanion(this, roster, "poacher", "archer", 7);
 		W.makeCompanion(this, roster, "retired_soldier", "banner", 8);
 
-		this.World.Assets.addBusinessReputation(this.m.StartingBusinessReputation);
+		if ("addBusinessReputation" in this.World.Assets) this.World.Assets.addBusinessReputation(this.m.StartingBusinessReputation);
 		this.World.Assets.m.Money = 3000;
 		this.World.Assets.m.Medicine = 40;
 		this.World.Assets.m.Ammo = 150;

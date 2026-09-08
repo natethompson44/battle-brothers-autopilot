@@ -10,7 +10,7 @@ this.wolfeo_hunt_scenario <- this.inherit("scripts/scenarios/world/starting_scen
 		this.m.Difficulty = 3;
 		this.m.Order = 6;
 		this.m.IsFixedLook = true;
-		this.m.StartingBusinessReputation = 250;
+		this.m.StartingBusinessReputation <- 250;
 		if ("StartingRosterTier" in this.m && ("Roster" in this.Const) && ("getTierForSize" in this.Const.Roster))
 		{
 			this.m.StartingRosterTier = this.Const.Roster.getTierForSize(8);
@@ -18,7 +18,7 @@ this.wolfeo_hunt_scenario <- this.inherit("scripts/scenarios/world/starting_scen
 		}
 		if ("setRosterReputationTiers" in this && ("Roster" in this.Const) && ("createReputationTiers" in this.Const.Roster))
 		{
-			this.setRosterReputationTiers(this.Const.Roster.createReputationTiers(this.m.StartingBusinessReputation));
+			this.setRosterReputationTiers(this.Const.Roster.createReputationTiers(250));
 		}
 	}
 
@@ -36,7 +36,7 @@ this.wolfeo_hunt_scenario <- this.inherit("scripts/scenarios/world/starting_scen
 		local hm = W.makeCompanion(this, roster, "houndmaster", "duelist", 3);
 		hm.getItems().addToBag(this.new("scripts/items/accessory/wardog_item"));
 
-		this.World.Assets.addBusinessReputation(this.m.StartingBusinessReputation);
+		if ("addBusinessReputation" in this.World.Assets) this.World.Assets.addBusinessReputation(this.m.StartingBusinessReputation);
 		this.World.Assets.m.Money = 1200;
 		this.World.Assets.m.Medicine = 20;
 		this.World.Assets.m.Ammo = 200;

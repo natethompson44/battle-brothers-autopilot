@@ -4,7 +4,7 @@
 local def = ::WolfeoStarts <- {
     ID = "mod_company_starts"
     Name = "Company Starts"
-    Version = "1.0.0"
+    Version = "1.0.1"
 }
 ::Hooks.register(def.ID, def.Version, def.Name);
 
@@ -64,16 +64,16 @@ def.Kits <- {
 // A fresh roster member with a background, a name and a title.
 def.makeBro <- function (_scenario, _roster, _background, _name = null, _title = null) {
     local bro = _roster.create("scripts/entity/tactical/player");
-    bro.m.HireTime = _scenario.Time.getVirtualTimeF();
+    bro.m.HireTime = ::Time.getVirtualTimeF();
     bro.setStartValuesEx([_background + "_background"]);
     if (_name != null) bro.setName(_name);
-    else bro.setName(_scenario.Const.Strings.CharacterNames[_scenario.Math.rand(0, _scenario.Const.Strings.CharacterNames.len() - 1)]);
+    else bro.setName(::Const.Strings.CharacterNames[::Math.rand(0, ::Const.Strings.CharacterNames.len() - 1)]);
     if (_title != null) bro.setTitle(_title);
     return bro;
 }
 
 local function pick(_scenario, _list) {
-    return _list[_scenario.Math.rand(0, _list.len() - 1)];
+    return _list[::Math.rand(0, _list.len() - 1)];
 }
 
 local function setTalents(_bro, _names, _stars) {
@@ -106,15 +106,15 @@ def.makeCompanion <- function (_scenario, _roster, _background, _role, _slot) {
         local old = items.getItemAtSlot(slot);
         if (old != null) {
             items.unequip(old);
-            _scenario.World.Assets.getStash().add(old);
+            ::World.Assets.getStash().add(old);
         }
     }
-    items.equip(_scenario.new(pick(_scenario, kit.weapon)));
-    if (kit.offhand.len() > 0) items.equip(_scenario.new(pick(_scenario, kit.offhand)));
-    items.equip(_scenario.new(kit.body));
-    items.equip(_scenario.new(kit.head));
-    items.equip(_scenario.new("scripts/items/accessory/wardog_item"));
-    if ("bag" in kit) foreach (b in kit.bag) items.addToBag(_scenario.new(b));
+    items.equip(::new(pick(_scenario, kit.weapon)));
+    if (kit.offhand.len() > 0) items.equip(::new(pick(_scenario, kit.offhand)));
+    items.equip(::new(kit.body));
+    items.equip(::new(kit.head));
+    items.equip(::new("scripts/items/accessory/wardog_item"));
+    if ("bag" in kit) foreach (b in kit.bag) items.addToBag(::new(b));
 
     local b = bro.getBaseProperties();
     foreach (k, v in kit.bump) {
@@ -136,16 +136,16 @@ def.makeWolfeo <- function (_scenario, _bro) {
         local old = items.getItemAtSlot(slot);
         if (old != null) {
             items.unequip(old);
-            _scenario.World.Assets.getStash().add(old);
+            ::World.Assets.getStash().add(old);
         }
     }
-    items.equip(_scenario.new("scripts/items/weapons/named/named_greatsword"));
-    items.equip(_scenario.new("scripts/items/armor/named/named_sellswords_armor"));
-    items.equip(_scenario.new("scripts/items/helmets/closed_flat_top_with_mail"));
+    items.equip(::new("scripts/items/weapons/named/named_greatsword"));
+    items.equip(::new("scripts/items/armor/named/named_sellswords_armor"));
+    items.equip(::new("scripts/items/helmets/closed_flat_top_with_mail"));
 
     _bro.getFlags().set("IsPlayerCharacter", true);
-    _bro.getSkills().add(_scenario.new("scripts/skills/traits/player_character_trait"));
-    _bro.getSkills().add(_scenario.new("scripts/skills/traits/wolfeo_trait"));
+    _bro.getSkills().add(::new("scripts/skills/traits/player_character_trait"));
+    _bro.getSkills().add(::new("scripts/skills/traits/wolfeo_trait"));
 
     local b = _bro.getBaseProperties();
     b.MeleeSkill += 15;
@@ -159,7 +159,7 @@ def.makeWolfeo <- function (_scenario, _bro) {
     setLevel(_bro, 8, 0);
     foreach (p in ["perk_colossus", "perk_reach_advantage", "perk_berserk", "perk_killing_frenzy", "perk_battle_forged",
                    "perk_mastery_sword", "perk_underdog", "perk_recover", "perk_fortified_mind", "perk_pathfinder", "perk_brawny"]) {
-        _bro.getSkills().add(_scenario.new("scripts/skills/perks/" + p));
+        _bro.getSkills().add(::new("scripts/skills/perks/" + p));
     }
     _bro.m.PerkPointsSpent = 11;
     _bro.setPlaceInFormation(4);
@@ -169,26 +169,26 @@ def.makeWolfeo <- function (_scenario, _bro) {
 // Spawn on a road tile next to a decent village. Same approach as the stock scenarios.
 def.spawnNearVillage <- function (_s) {
     local village = null;
-    foreach (v in _s.World.EntityManager.getSettlements()) {
+    foreach (v in ::World.EntityManager.getSettlements()) {
         if (!v.isIsolatedFromRoads() && v.getSize() >= 2 && (!("isSouthern" in v) || !v.isSouthern())) {
             village = v;
             break;
         }
     }
-    if (village == null) village = _s.World.EntityManager.getSettlements()[0];
+    if (village == null) village = ::World.EntityManager.getSettlements()[0];
     local vt = village.getTile();
     local spawn = vt;
     for (local tries = 0; tries < 200; tries++) {
-        local x = _s.Math.rand(_s.Math.max(2, vt.SquareCoords.X - 2), _s.Math.min(_s.Const.World.Settings.SizeX - 2, vt.SquareCoords.X + 2));
-        local y = _s.Math.rand(_s.Math.max(2, vt.SquareCoords.Y - 2), _s.Math.min(_s.Const.World.Settings.SizeY - 2, vt.SquareCoords.Y + 2));
-        if (!_s.World.isValidTileSquare(x, y)) continue;
-        local tile = _s.World.getTileSquare(x, y);
-        if (tile.Type == _s.Const.World.TerrainType.Ocean || tile.Type == _s.Const.World.TerrainType.Shore) continue;
+        local x = ::Math.rand(::Math.max(2, vt.SquareCoords.X - 2), ::Math.min(::Const.World.Settings.SizeX - 2, vt.SquareCoords.X + 2));
+        local y = ::Math.rand(::Math.max(2, vt.SquareCoords.Y - 2), ::Math.min(::Const.World.Settings.SizeY - 2, vt.SquareCoords.Y + 2));
+        if (!::World.isValidTileSquare(x, y)) continue;
+        local tile = ::World.getTileSquare(x, y);
+        if (tile.Type == ::Const.World.TerrainType.Ocean || tile.Type == ::Const.World.TerrainType.Shore) continue;
         if (tile.getDistanceTo(vt) == 0 || !tile.HasRoad) continue;
         spawn = tile;
         break;
     }
-    _s.World.State.m.Player = _s.World.spawnEntity("scripts/entity/world/player_party", spawn.Coords.X, spawn.Coords.Y);
-    _s.World.Assets.updateLook(6);
-    _s.World.getCamera().setPos(_s.World.State.m.Player.getPos());
+    ::World.State.m.Player = ::World.spawnEntity("scripts/entity/world/player_party", spawn.Coords.X, spawn.Coords.Y);
+    ::World.Assets.updateLook(6);
+    ::World.getCamera().setPos(::World.State.m.Player.getPos());
 }
