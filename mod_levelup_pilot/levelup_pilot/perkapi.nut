@@ -1,4 +1,4 @@
-// One perk API for both rulesets. Vanilla: the single fixed tree in ::Const.Perks.PerkDefs and
+// One perk API for both rulesets. Vanilla: the single fixed tree in ::Const.Perks.Perks and
 // string IDs. Legends: per-background dynamic trees and ::Legends.Perk constants. Everything
 // above this file talks in constant names ("Colossus", "SpecMace") and gets IDs back.
 local def = ::LevelupPilot;
@@ -38,6 +38,30 @@ def.Perks <- {
         return (_constName in this.VanillaIds) ? this.VanillaIds[_constName] : null;
     }
 
+    // Vanilla keeps its tree at ::Const.Perks.Perks: an array of rows, each perk def carrying
+    // ID, Row and Unlocks (both the row index). PerkDefs is Legends' name for the same thing and
+    // is only a fallback here.
+    function vanillaRows() {
+        if (!("Perks" in ::Const)) return null;
+        if (("Perks" in ::Const.Perks) && typeof ::Const.Perks.Perks == "array") return ::Const.Perks.Perks;
+        if (("PerkDefs" in ::Const.Perks) && typeof ::Const.Perks.PerkDefs == "array") return ::Const.Perks.PerkDefs;
+        return null;
+    }
+
+    // Can this perk be taken right now? The player entity has isPerkUnlockable() in vanilla and
+    // Legends; if a ruleset lacks it, apply the game's own rule: a point to spend, not owned yet,
+    // and enough points already spent to reach the perk's row.
+    function unlockable(_bro, _id) {
+        if ("isPerkUnlockable" in _bro) return _bro.isPerkUnlockable(_id);
+        if (_bro.m.PerkPoints <= 0 || _bro.getSkills().hasSkill(_id)) return false;
+        foreach (row in this.treeRows(_bro)) {
+            foreach (p in row) {
+                if (p.ID == _id) return _bro.m.PerkPointsSpent >= p.Row;
+            }
+        }
+        return false;
+    }
+
     // Rows of {ID, Const, Row} for this bro. Vanilla: everyone shares one tree.
     function treeRows(_bro) {
         local rows = [];
@@ -54,9 +78,8 @@ def.Perks <- {
             }
             return rows;
         }
-        if (!("Perks" in ::Const) || !("PerkDefs" in ::Const.Perks)) return rows;
-        local defs = ::Const.Perks.PerkDefs;
-        if (typeof defs != "array") return rows;
+        local defs = this.vanillaRows();
+        if (defs == null) return rows;
         local reverse = {};
         foreach (k, v in this.VanillaIds) reverse[v] <- k;
         foreach (r, row in defs) {

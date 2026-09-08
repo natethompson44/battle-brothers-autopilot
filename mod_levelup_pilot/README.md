@@ -17,7 +17,7 @@ clicked yourself.
 | Auto-assign attribute points | on | Raises the three attributes that fit the bro's role, weighted by roll size and talent stars. Never raises a capped attribute. Nudges Resolve while it is below 45. |
 | Auto-assign perk points | on | Picks perks from a role-based wish list: Student if level 3 or lower, weapon mastery for the weapon in hand, Nimble or Battle Forged by the armor worn, then the role's staples, then generic staples, then the cheapest sane perk in the tree so the next tier unlocks. |
 | Leave my character manual | off | Never touches the player character. |
-| Debug logging | off | Writes every pick and why to `log.html`. |
+| Debug logging | off | Also writes every sweep to `log.html`. Every pick and the reason for it is always logged as `levelup pilot: <name> [role] perk: ...` or `... level-up: ...`. |
 
 **Per-bro opt-out:** rename a bro so his name ends with `!` and he is left alone entirely.
 
