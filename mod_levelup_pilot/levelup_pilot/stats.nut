@@ -62,6 +62,6 @@ def.spendOneLevelUp <- function (_bro, _info) {
     _bro.setAttributeLevelUpValues(v);
     local joined = "";
     foreach (i, t in text) joined += (i > 0 ? ", " : "") + t;
-    def.dbg(_bro.getName() + " [" + _info.role + "] level-up: " + joined);
+    ::logInfo("levelup pilot: " + _bro.getName() + " [" + _info.role + "] level-up: " + joined);
     return true;
 }

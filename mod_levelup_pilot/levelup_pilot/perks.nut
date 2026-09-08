@@ -116,7 +116,7 @@ local function candidate(_bro, _constName) {
     if (id == null) return null;
     if (_bro.getSkills().hasSkill(id)) return null;
     if (!def.Perks.inTree(_bro, id)) return null;
-    if (!_bro.isPerkUnlockable(id)) return null;
+    if (!def.Perks.unlockable(_bro, id)) return null;
     return id;
 }
 
@@ -148,7 +148,7 @@ def.pickPerk <- function (_bro, _info) {
         foreach (perk in row) {
             if (isAvoided(perk.Const)) continue;
             if (_bro.getSkills().hasSkill(perk.ID)) continue;
-            if (!_bro.isPerkUnlockable(perk.ID)) continue;
+            if (!def.Perks.unlockable(_bro, perk.ID)) continue;
             if (perk.Row < bestRow) {
                 bestRow = perk.Row;
                 best = perk;
@@ -163,6 +163,6 @@ def.spendOnePerkPoint <- function (_bro, _info) {
     local pick = def.pickPerk(_bro, _info);
     if (pick == null) return false;
     local ok = _bro.unlockPerk(pick.id);
-    def.dbg(_bro.getName() + " [" + _info.role + "] perk: " + pick.id + " (" + pick.why + ")" + (ok ? "" : " FAILED"));
+    ::logInfo("levelup pilot: " + _bro.getName() + " [" + _info.role + "] perk: " + pick.id + " (" + pick.why + ")" + (ok ? "" : " FAILED"));
     return ok;
 }

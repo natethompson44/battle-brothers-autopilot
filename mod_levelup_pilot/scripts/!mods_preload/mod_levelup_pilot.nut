@@ -4,7 +4,7 @@
 local def = ::LevelupPilot <- {
     ID = "mod_levelup_pilot"
     Name = "Level-Up Pilot"
-    Version = "1.1.0"
+    Version = "1.1.1"
     PicksPerLevel = 3          // attributes raised per level-up, same as the character screen
     ManualMarker = "!"         // a bro whose name ends with this is left alone
     MaxIterations = 60         // safety cap per bro per sweep
@@ -32,8 +32,8 @@ mod.queue(">mod_legends", ">mod_msu", function () {
     page.addElement(::MSU.Class.BooleanSetting("skipAvatar", false, "Leave my character manual",
         "Never touch the player character's level-ups or perks."));
     page.addElement(::MSU.Class.BooleanSetting("debug", false, "Debug logging",
-        "Write every pick and the reason for it to log.html. A bro whose name ends with '" + def.ManualMarker
-        + "' is always left alone, with or without this."));
+        "Also write every sweep to log.html. Picks and the reason for them are always logged. A bro whose name ends with '"
+        + def.ManualMarker + "' is always left alone, with or without this."));
 
     ::include("levelup_pilot/perkapi");
     ::include("levelup_pilot/roles");
