@@ -30,7 +30,7 @@ LEGENDS = {
     "mod_legends-assets-*.zip": "mod_legends_assets_19.4.3.zip",
     "mod_legends-19*.zip": "mod_legends_19.4.22.zip",
 }
-OURS = ["mod_autopilot_expert", "mod_levelup_pilot"]
+OURS = ["mod_autopilot_expert", "mod_levelup_pilot", "mod_company_starts"]
 
 
 def newest(prefix):

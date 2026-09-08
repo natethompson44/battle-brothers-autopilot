@@ -158,6 +158,18 @@ def.setupAgent <- function (_actor, _agent) {
 
     // Kick: only worth it to knock an enemy out of shieldwall / spearwall / riposte.
     if (skills.hasSkill("actives.legend_kick")) _agent.addBehavior(::new("scripts/ai/autopilot_expert_kick"));
+    // Blink (Company Starts' Wolfeo): strike from range, escape when mobbed. He is not a line
+    // unit, so no holding and a lot less caution about leaving the formation.
+    if (skills.hasSkill("actives.wolfeo_blink")) {
+        _agent.addBehavior(::new("scripts/ai/autopilot_expert_blink"));
+        tweakBehavior(_agent, "Disengage", 2.0, _actor.getName());
+        local props = _agent.m.Properties;
+        foreach (k, v in {OverallFormationMult = 0.3, EngageFlankingMult = 2.0, TargetPriorityFinishOpponentMult = 5.0}) {
+            if (k in props) props[k] = v;
+        }
+        _actor.m._autopilot.blinker <- true;
+        def.dbg(_actor.getName() + " is a blinker");
+    }
 
     if (def.conf("support")) {
         if (has(def.AuraSkills)) _agent.addBehavior(::new("scripts/ai/autopilot_expert_aura"));
@@ -243,6 +255,7 @@ def.onAgentUpdate <- function (_agent) {
     }
 
     // Early-round line holding: wait for them to come, unless they outgun us at range.
+    if (("blinker" in mode) && mode.blinker) return;
     if (!def.conf("holdline") || HoldRoles.find(role) == null) return;
     local round = def.getRound();
     local holding = false;

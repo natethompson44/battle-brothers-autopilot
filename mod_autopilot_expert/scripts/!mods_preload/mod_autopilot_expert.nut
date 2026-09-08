@@ -5,7 +5,7 @@
 local def = ::AutopilotExpert <- {
     ID = "mod_autopilot_expert"
     Name = "Autopilot Expert"
-    Version = "1.0.9"
+    Version = "1.1.0"
     Role = {
         Tank = "tank"
         Striker = "striker"
@@ -69,6 +69,7 @@ mod.queue(">mod_autopilot_new", ">mod_legends", ">mod_msu", function () {
     ::MSU.AI.addBehavior("APX_Mark", "APX.Mark", 44, attack * 0.7);
     ::MSU.AI.addBehavior("APX_Raise", "APX.Raise", 45, attack * 1.6);
     ::MSU.AI.addBehavior("APX_Kick", "APX.Kick", 46, attack * 1.2);
+    ::MSU.AI.addBehavior("APX_Blink", "APX.Blink", 47, attack * 1.5);
 
     ::include("autopilot_expert/field");
     ::include("autopilot_expert/legends_skills");

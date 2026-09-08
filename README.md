@@ -1,19 +1,20 @@
 # Battle Brothers autonomous-company mods
 
-Two mods that make Battle Brothers play itself so you can play the captain: recruit, equip,
+Three mods that make Battle Brothers play itself so you can play the captain: recruit, equip,
 pick fights, and live with the outcome.
 
 | Mod | What it does | Zip |
 |---|---|---|
 | **Autopilot Expert** | Companion to Suor's Autopilot New. Auto-engages the AI at battle start, role-based targeting profiles, early-round line holding, takes over summons and reinforcements, teaches the AI extra skills, support behaviors. | `mod_autopilot_expert_<version>.zip` |
 | **Level-Up Pilot** | Spends attribute points and perk points automatically with role-based builds. Vanilla-first; uses Legends' perk trees when Legends is present. | `mod_levelup_pilot_<version>.zip` |
+| **Company Starts** | Two custom starting origins built for autonomous play: *Wolfeo's Company* (elite blinking avatar plus a nine-man line with war dogs) and *Wolfeo's Hunt* (the same avatar with a small hunting pack). Vanilla only. | `mod_company_starts_<version>.zip` |
 
 Each mod's folder has its own README with settings. Source is in the folders; the zips at the
 repo root are the installable builds.
 
 ## Installing
 
-Copy the two `mod_*.zip` files from the repo root into the game's `data` folder, as they are, next
+Copy the `mod_*.zip` files from the repo root into the game's `data` folder, as they are, next
 to the required mods below. Do **not** put the GitHub "Download ZIP" of the whole repo in `data`:
 it wraps everything in a `battle-brothers-autopilot-main/` folder, so the game finds no
 `scripts/` at the zip root and silently ignores it.
@@ -49,8 +50,9 @@ mod_modern_hooks_0.6.0.zip    Modern Hooks
 mod_msu_1.9.0.zip             MSU
 mod_stdlib_2.6.zip            stdlib (the Nexus file is named stdlib_2.6.zip; either name works)
 mod_autopilot_new_2.9.0.zip   Autopilot New
-mod_autopilot_expert_1.0.9.zip
+mod_autopilot_expert_1.1.0.zip
 mod_levelup_pilot_1.1.1.zip
+mod_company_starts_1.0.0.zip
 ```
 
 If the game shows a red Modern Hooks screen mentioning `stdlib`, `mod_autopilot_new` or `mod_msu`,
