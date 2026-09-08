@@ -33,11 +33,13 @@ already there, builds them from their GitHub sources (they are only released on 
 are BSD-licensed and the script packs exactly what the authors' Makefiles pack). Needs `curl` and
 `python3`, both on SteamOS.
 
-**If you previously ran with Legends and removed it:** Legends bundles Modding Script Hooks
-(mod_hooks). stdlib's preload runs before Modern Hooks is loaded, so without mod_hooks it never
-registers and every mod that requires stdlib fails with a big red error. Add mod_hooks back. It is
-on Nexus (mod 42) and mirrored at
-https://github.com/jcsato/modding_script_hooks/releases/latest.
+**"requires stdlib" with stdlib in the folder:** the stdlib 2.6 zip on Nexus only registers itself
+through Modding Script Hooks (mod_hooks). With Legends installed you never notice, because Legends
+bundles mod_hooks; take Legends out and every mod that requires stdlib fails with a red screen even
+though stdlib is there. Either add mod_hooks (Nexus mod 42, mirrored at
+https://github.com/jcsato/modding_script_hooks/releases/latest) or replace the stdlib zip with one
+built from the GitHub source, which registers through Modern Hooks directly. `deck_install.sh`
+does both.
 
 A working vanilla install has all of these in `data` (versions may differ):
 
