@@ -28,8 +28,10 @@ Where `data` is:
 
 **Steam Deck / Linux shortcut:** in Desktop Mode open Konsole in the repo folder and run
 `bash tools/deck_install.sh`. It finds the data folder, downloads Modding Script Hooks, Modern Hooks
-and MSU from their GitHub releases, copies our two zips, and tells you if stdlib or Autopilot New
-still need to be added from Nexus (those two are only distributed there).
+and MSU from their GitHub releases, copies our two zips, and, if stdlib or Autopilot New are not
+already there, builds them from their GitHub sources (they are only released on Nexus; the sources
+are BSD-licensed and the script packs exactly what the authors' Makefiles pack). Needs `curl` and
+`python3`, both on SteamOS.
 
 **If you previously ran with Legends and removed it:** Legends bundles Modding Script Hooks
 (mod_hooks). stdlib's preload runs before Modern Hooks is loaded, so without mod_hooks it never

@@ -1,9 +1,9 @@
 #!/bin/bash
 # Steam Deck / Linux installer for the vanilla mod set.
 #
-# Downloads the dependencies that are mirrored on GitHub straight into the game's data folder and
-# copies our two mods from this repo. stdlib and Autopilot New are only distributed on NexusMods,
-# so the script tells you when those still need to be added by hand.
+# Downloads Modding Script Hooks, Modern Hooks and MSU from their GitHub releases straight into the
+# game's data folder, copies our two mods from this repo, and builds stdlib and Autopilot New from
+# their GitHub sources if they are not already there (they are only released on NexusMods).
 #
 # Usage (Desktop Mode, Konsole):
 #   bash tools/deck_install.sh              # auto-detect the data folder
@@ -49,11 +49,36 @@ for prefix in mod_autopilot_expert mod_levelup_pilot; do
     echo "installed:  $(basename "$src")"
 done
 
-echo
-missing=0
-ls "$DATA"/*stdlib*.zip >/dev/null 2>&1 || { echo "STILL NEEDED: stdlib 2.5+  https://www.nexusmods.com/battlebrothers/mods/676"; missing=1; }
-ls "$DATA"/mod_autopilot_new*.zip >/dev/null 2>&1 || { echo "STILL NEEDED: Autopilot New 2.9.0+  https://www.nexusmods.com/battlebrothers/mods/675"; missing=1; }
-[ $missing = 0 ] && echo "all required mods present"
+# stdlib and Autopilot New are published on NexusMods, which needs a login. Their sources are on
+# GitHub under a BSD license, so if they are not in data we build the same zip the authors' Makefile
+# builds: stdlib = "stdlib" + "scripts"; Autopilot New = "autopilot gfx scripts ui" from the
+# autopilot/ folder of Suor's mods repo. ARCHIVE_DIR is only for offline testing.
+build_from_github() {  # $1 output name, $2 repo, $3 subdir inside the repo ("" for root), rest: dirs
+    local out="$1" repo="$2" sub="$3"; shift 3
+    local tmp; tmp=$(mktemp -d)
+    local arch="$tmp/src.zip"
+    if [ -n "${ARCHIVE_DIR:-}" ]; then cp "$ARCHIVE_DIR/${repo#*/}.zip" "$arch"
+    else curl -sSL -o "$arch" "https://github.com/$repo/archive/refs/heads/master.zip"; fi
+    python3 - "$arch" "$DATA/$out" "$sub" "$repo" "$@" <<'PY'
+import sys, zipfile
+arch, out, sub, repo, dirs = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5:]
+with zipfile.ZipFile(arch) as src, zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as dst:
+    top = src.namelist()[0].split("/")[0]
+    base = top + "/" + (sub + "/" if sub else "")
+    n = 0
+    for name in sorted(src.namelist()):
+        if not name.startswith(base) or name.endswith("/"): continue
+        rel = name[len(base):]
+        if rel.split("/")[0] in dirs:
+            dst.writestr(rel, src.read(name)); n += 1
+    if n == 0: sys.exit("nothing packed from " + arch)
+    print("built:     ", out.rsplit("/", 1)[-1], "(" + str(n) + " files from github.com/" + repo + ")")
+PY
+    rm -rf "$tmp"
+}
+ls "$DATA"/*stdlib*.zip >/dev/null 2>&1 || build_from_github mod_stdlib_2.6.zip Suor/battle-brothers-stdlib "" stdlib scripts
+ls "$DATA"/mod_autopilot_new*.zip >/dev/null 2>&1 || build_from_github mod_autopilot_new_2.9.0.zip Suor/battle-brothers-mods autopilot autopilot gfx scripts ui
+
 echo
 echo "data folder now contains:"
 ls -1 "$DATA"/*.zip | xargs -n1 basename
