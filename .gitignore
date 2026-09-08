@@ -1,6 +1,5 @@
 # Third-party mods are not redistributed from the repo root; see README.md for where to get them.
 # Exception: third_party/ holds BSD-licensed builds of Suor's stdlib and Autopilot New (with license).
-!third_party/*.zip
 mod_Quickstart-*.zip
 mod_autopilot_new_*.zip
 mod_hooks.zip-*.zip
@@ -17,3 +16,6 @@ __pycache__/
 
 # private
 design/
+
+# bundled BSD-licensed builds (last rule wins)
+!third_party/*.zip
