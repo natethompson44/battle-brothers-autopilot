@@ -9,7 +9,42 @@ pick fights, and live with the outcome.
 | **Level-Up Pilot** | Spends attribute points and perk points automatically with role-based builds. Vanilla-first; uses Legends' perk trees when Legends is present. | `mod_levelup_pilot_<version>.zip` |
 
 Each mod's folder has its own README with settings. Source is in the folders; the zips at the
-repo root are the installable builds. Drop zips into the game's `data` folder.
+repo root are the installable builds.
+
+## Installing
+
+Copy the two `mod_*.zip` files from the repo root into the game's `data` folder, as they are, next
+to the required mods below. Do **not** put the GitHub "Download ZIP" of the whole repo in `data`:
+it wraps everything in a `battle-brothers-autopilot-main/` folder, so the game finds no
+`scripts/` at the zip root and silently ignores it.
+
+Where `data` is:
+
+| Platform | Path |
+|---|---|
+| Windows | `C:\Program Files (x86)\Steam\steamapps\common\Battle Brothers\data` |
+| Steam Deck / Linux (internal drive) | `~/.local/share/Steam/steamapps/common/Battle Brothers/data` |
+| Steam Deck (SD card) | `/run/media/mmcblk0p1/steamapps/common/Battle Brothers/data` |
+
+A working vanilla install has all of these in `data` (versions may differ):
+
+```
+mod_hooks_20.1.zip            Modding Script Hooks
+mod_modern_hooks_0.6.0.zip    Modern Hooks
+mod_msu_1.9.0.zip             MSU
+mod_stdlib_2.6.zip            stdlib (the Nexus file is named stdlib_2.6.zip; either name works)
+mod_autopilot_new_2.9.0.zip   Autopilot New
+mod_autopilot_expert_1.0.9.zip
+mod_levelup_pilot_1.1.0.zip
+```
+
+If the game shows a red Modern Hooks screen mentioning `stdlib`, `mod_autopilot_new` or `mod_msu`,
+one of the mods in that list is missing from `data` or is too old for the version our mods ask for.
+The requirements are checked by name, so a nested zip (a zip inside the zip you downloaded) or a
+zip with the mod's files under an extra top-level folder counts as missing.
+
+The game log is `Documents\Battle Brothers\log.html` on Windows. On Steam Deck under Proton it is
+`~/.local/share/Steam/steamapps/compatdata/365360/pfx/drive_c/users/steamuser/Documents/Battle Brothers/log.html`.
 
 ## Required mods (download from their authors)
 
