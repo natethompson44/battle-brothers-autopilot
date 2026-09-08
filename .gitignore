@@ -1,0 +1,17 @@
+# Third-party mods are not redistributed here; see README.md for where to get them.
+mod_Quickstart-*.zip
+mod_autopilot_new_*.zip
+mod_hooks.zip-*.zip
+mod_legends-*.zip
+mod_legends-assets-*.zip
+mod_modern_hooks-*.zip
+mod_msu *.zip
+stdlib_*.zip
+
+# local
+.claude/
+*.log
+__pycache__/
+
+# private
+design/
