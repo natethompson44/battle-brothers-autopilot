@@ -26,10 +26,21 @@ Where `data` is:
 | Steam Deck / Linux (internal drive) | `~/.local/share/Steam/steamapps/common/Battle Brothers/data` |
 | Steam Deck (SD card) | `/run/media/mmcblk0p1/steamapps/common/Battle Brothers/data` |
 
+**Steam Deck / Linux shortcut:** in Desktop Mode open Konsole in the repo folder and run
+`bash tools/deck_install.sh`. It finds the data folder, downloads Modding Script Hooks, Modern Hooks
+and MSU from their GitHub releases, copies our two zips, and tells you if stdlib or Autopilot New
+still need to be added from Nexus (those two are only distributed there).
+
+**If you previously ran with Legends and removed it:** Legends bundles Modding Script Hooks
+(mod_hooks). stdlib's preload runs before Modern Hooks is loaded, so without mod_hooks it never
+registers and every mod that requires stdlib fails with a big red error. Add mod_hooks back. It is
+on Nexus (mod 42) and mirrored at
+https://github.com/jcsato/modding_script_hooks/releases/latest.
+
 A working vanilla install has all of these in `data` (versions may differ):
 
 ```
-mod_hooks_20.1.zip            Modding Script Hooks
+mod_hooks_21.1.zip            Modding Script Hooks
 mod_modern_hooks_0.6.0.zip    Modern Hooks
 mod_msu_1.9.0.zip             MSU
 mod_stdlib_2.6.zip            stdlib (the Nexus file is named stdlib_2.6.zip; either name works)
@@ -67,6 +78,8 @@ Legends you do, or stdlib fails to register.
 - `tools/battle_report.py` - turns the game's `log.html` into a per-fight report. `--last` prints the
   most recent fight turn by turn.
 - `tools/switch_mods.py vanilla|legends|status` - swaps the game's data folder between the two mod
-  sets (expects the third-party zips next to this README).
+  sets (Windows; expects the third-party zips next to this README).
+- `tools/deck_install.sh [data-folder]` - Steam Deck / Linux: downloads the GitHub-hosted
+  dependencies into the data folder and installs our two mods.
 
 
