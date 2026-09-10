@@ -50,9 +50,9 @@ mod_modern_hooks_0.6.0.zip    Modern Hooks
 mod_msu_1.9.0.zip             MSU
 mod_stdlib_2.6.zip            stdlib (the Nexus file is named stdlib_2.6.zip; either name works)
 mod_autopilot_new_2.9.0.zip   Autopilot New
-mod_autopilot_expert_1.1.0.zip
+mod_autopilot_expert_1.2.0.zip
 mod_levelup_pilot_1.1.1.zip
-mod_company_starts_1.0.0.zip
+mod_company_starts_1.0.2.zip
 ```
 
 If the game shows a red Modern Hooks screen mentioning `stdlib`, `mod_autopilot_new` or `mod_msu`,

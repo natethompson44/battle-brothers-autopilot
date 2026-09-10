@@ -26,6 +26,26 @@ Always on: the AI learns Legends skills it previously ignored (Hew, Halberd Smit
 Heartseeker, Run Through, Double Swing, Cascade, Piercing Shot/Bolt, sling shots, Staffwall,
 Staff Riposte, Fortify, Second Wind, disarms, Kick, Buckler Bash, Grapple, Tackle, and more).
 
+## Blink (Company Starts' Wolfeo)
+
+A bro with the Blink skill is treated as a raider, not a line unit: he never holds the line and
+the AI plans his turn around the blink.
+
+- **Strike**: blink next to the best target in reach and swing. If the target is too far for a
+  straight blink he walks first, as long as walk + blink + swing fit his action points (seven
+  tiles with 12 AP and a greatsword). Archers and wounded enemies come first. From an engaged
+  position he only leaves when the new target is clearly worth it, or when three or more enemies
+  are on him.
+- **Retreat**: after the swing, with action points left for a blink but not for another swing,
+  he blinks out if enemies are closing in and he has the fatigue to swing again next turn.
+- **Approach**: when nothing is in reach this turn he walks and then blinks toward the enemy,
+  landing with nobody adjacent, so he is in striking range a turn earlier than by walking.
+- **Escape**: badly hurt with an enemy adjacent, he blinks to a tile with no enemy next to it,
+  preferably near our own line.
+
+With Debug logging on, every decision (and every reason for not blinking) is written to
+`log.html` as `autopilot expert: <name> blink: ...`.
+
 ## Troubleshooting
 
 If a bro does something dumb, turn one toggle off and play another battle. If the game logs an

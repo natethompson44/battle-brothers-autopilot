@@ -5,7 +5,7 @@
 local def = ::AutopilotExpert <- {
     ID = "mod_autopilot_expert"
     Name = "Autopilot Expert"
-    Version = "1.1.0"
+    Version = "1.2.0"
     Role = {
         Tank = "tank"
         Striker = "striker"
