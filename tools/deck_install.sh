@@ -41,7 +41,7 @@ for name in "${!GITHUB[@]}"; do
     fi
 done
 
-for prefix in mod_autopilot_expert mod_levelup_pilot mod_company_starts; do
+for prefix in mod_autopilot_expert mod_levelup_pilot mod_kit_pilot mod_company_starts; do
     src=$(ls "$REPO"/${prefix}_*.zip 2>/dev/null | sort -V | tail -1 || true)
     [ -n "$src" ] || { echo "missing in repo: ${prefix}_*.zip"; continue; }
     rm -f "$DATA"/${prefix}_*.zip

@@ -1,12 +1,13 @@
 # Battle Brothers autonomous-company mods
 
-Three mods that make Battle Brothers play itself so you can play the captain: recruit, equip,
+Four mods that make Battle Brothers play itself so you can play the captain: recruit, equip,
 pick fights, and live with the outcome.
 
 | Mod | What it does | Zip |
 |---|---|---|
 | **Autopilot Expert** | Companion to Suor's Autopilot New. Auto-engages the AI at battle start, role-based targeting profiles, early-round line holding, takes over summons and reinforcements, teaches the AI extra skills, support behaviors. | `mod_autopilot_expert_<version>.zip` |
 | **Level-Up Pilot** | Spends attribute points and perk points automatically with role-based builds. Vanilla-first; uses Legends' perk trees when Legends is present. | `mod_levelup_pilot_<version>.zip` |
+| **Kit Pilot** | Equips the company from the stash automatically: weapon, shield, armor, helmet, quiver by role, veterans first, upgrades when the stash has something clearly better. | `mod_kit_pilot_<version>.zip` |
 | **Company Starts** | Two custom starting origins built for autonomous play: *Wolfeo's Company* (elite blinking avatar plus a nine-man line with war dogs) and *Wolfeo's Hunt* (the same avatar with a small hunting pack). Vanilla only. | `mod_company_starts_<version>.zip` |
 
 Each mod's folder has its own README with settings. Source is in the folders; the zips at the
@@ -52,6 +53,7 @@ mod_stdlib_2.6.zip            stdlib (the Nexus file is named stdlib_2.6.zip; ei
 mod_autopilot_new_2.9.0.zip   Autopilot New
 mod_autopilot_expert_1.2.0.zip
 mod_levelup_pilot_1.1.1.zip
+mod_kit_pilot_1.0.0.zip
 mod_company_starts_1.0.2.zip
 ```
 
