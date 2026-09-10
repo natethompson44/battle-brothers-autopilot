@@ -1,11 +1,11 @@
-// Kit Pilot - equips the company from the stash automatically. Runs on the world map (after
-// battles and whenever the world screen is shown), never mid-fight. Uses the same equip /
-// unequip functions the inventory screen uses; nothing is created or destroyed, items only move
-// between the stash and the bros.
+// Kit Pilot - equips the company from the stash. Press K on the world map (the character screen
+// may be open) for one sweep and a report of what moved to whom; optionally it also runs on its
+// own after battles and town visits. Uses the same equip / unequip functions the inventory
+// screen uses; nothing is created or destroyed, items only move between the stash and the bros.
 local def = ::KitPilot <- {
     ID = "mod_kit_pilot"
     Name = "Kit Pilot"
-    Version = "1.0.0"
+    Version = "1.1.0"
     ManualMarker = "!"         // a bro whose name ends with this is left alone
     MaxPasses = 3              // sweep passes so hand-me-downs cascade to the next bro
     function dbg(_msg) {
@@ -28,7 +28,11 @@ mod.queue(">mod_legends", ">mod_msu", function () {
     local page = def.msu.ModSettings.addPage("Kit Pilot");
     page.addElement(::MSU.Class.BooleanSetting("equip", true, "Equip bros from the stash",
         "Fill empty weapon, shield, armor, helmet and quiver slots from the stash, by the bro's role. "
-        + "Veterans are served first, so what they take off goes to the next bro down."));
+        + "Veterans are served first, so what they take off goes to the next bro down. "
+        + "Press K on the world map to run a sweep; a popup then lists every change."));
+    page.addElement(::MSU.Class.BooleanSetting("auto", false, "Also run automatically",
+        "Run a sweep on its own after every battle and whenever the world map is shown again "
+        + "(leaving a town, closing an event). Off: only when you press K."));
     page.addElement(::MSU.Class.BooleanSetting("upgrade", true, "Upgrade worn gear",
         "Also replace a worn item with a clearly better one from the stash (about 15-20% better). "
         + "The old item goes back to the stash. Named items a bro already wears are never taken off him."));

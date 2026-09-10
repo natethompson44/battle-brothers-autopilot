@@ -3,6 +3,8 @@
 // directly and nothing is created or destroyed.
 local def = ::KitPilot;
 
+def.Changes <- [];     // what the current sweep moved, one line each
+
 local Upgrade = {
     weapon = 1.2     // a replacement weapon must score this much more than the worn one
     shield = 1.15
@@ -79,7 +81,9 @@ def.swapIn <- function (_bro, _item, _slot, _why) {
             ::logWarning("kit pilot: no room in the stash or bag for " + d.getName() + " taken off " + _bro.getName());
         }
     }
-    def.log(_bro.getName() + ": " + def.describe(old) + " -> " + _item.getName() + " (" + _why + ")");
+    local line = _bro.getName() + ": " + def.describe(old) + " -> " + _item.getName() + " (" + _why + ")";
+    def.log(line);
+    def.Changes.push(line);
     return true;
 };
 
@@ -105,7 +109,9 @@ def.fitWeapon <- function (_bro, _info) {
             return false;
         }
     }
-    return def.swapIn(_bro, pick.item, ::Const.ItemSlot.Mainhand, role + " weapon");
+    local why = role + " weapon, value " + ::Math.round(pick.score);
+    if (cur != null) why += " vs " + ::Math.round(def.weaponScore(_bro, _info, cur));
+    return def.swapIn(_bro, pick.item, ::Const.ItemSlot.Mainhand, why);
 };
 
 def.fitShield <- function (_bro, _info) {
@@ -120,7 +126,9 @@ def.fitShield <- function (_bro, _info) {
     local pick = bestOf(def.stashItems(), @(it) def.isShield(it), @(it) def.shieldScore(it));
     if (pick.item == null) return false;
     if (cur != null && pick.score < def.shieldScore(cur) * Upgrade.shield) return false;
-    return def.swapIn(_bro, pick.item, ::Const.ItemSlot.Offhand, "shield");
+    local why = "shield, defense " + ::Math.round(pick.score);
+    if (cur != null) why += " vs " + ::Math.round(def.shieldScore(cur));
+    return def.swapIn(_bro, pick.item, ::Const.ItemSlot.Offhand, why);
 };
 
 // Body armor, then helmet, each within the fatigue the bro has left.
@@ -150,7 +158,10 @@ def.fitArmorPiece <- function (_bro, _info, _slot) {
         def.dbg(_bro.getName() + ": keeps " + cur.getName() + " (" + curArmor + ") over " + pick.item.getName() + " (" + pick.score + ")");
         return false;
     }
-    return def.swapIn(_bro, pick.item, _slot, (isBody ? "armor" : "helmet") + ", fatigue floor " + minFat);
+    local why = (isBody ? "armor " : "helmet ") + ::Math.round(pick.score);
+    if (cur != null) why += " vs " + ::Math.round(curArmor);
+    why += ", keeps " + ::Math.round(fatMax + curPen - def.penalty(_info, pick.item)) + " fatigue";
+    return def.swapIn(_bro, pick.item, _slot, why);
 };
 
 def.fitAmmo <- function (_bro, _info) {
@@ -184,7 +195,9 @@ def.fitSidearm <- function (_bro, _info) {
         stash.add(best);
         return false;
     }
-    def.log(_bro.getName() + ": " + best.getName() + " into the bag (archer sidearm)");
+    local line = _bro.getName() + ": " + best.getName() + " into the bag (archer sidearm)";
+    def.log(line);
+    def.Changes.push(line);
     return true;
 };
 
@@ -211,16 +224,18 @@ def.process <- function (_bro) {
     return changed;
 };
 
+// Returns the list of change lines (empty when nothing moved), null when it could not run.
 def.sweep <- function (_why) {
-    if (!def.conf("equip")) return;
-    if (def.isInBattle()) return;
-    if (!("World" in getroottable()) || ::World == null) return;
+    def.Changes = [];
+    if (!def.conf("equip")) return null;
+    if (def.isInBattle()) return null;
+    if (!("World" in getroottable()) || ::World == null) return null;
     local roster;
     try {
         roster = clone ::World.getPlayerRoster().getAll();
         def.stash();
     } catch (e) {
-        return;
+        return null;
     }
     roster.sort(@(a, b) b.getLevel() <=> a.getLevel());
     def.dbg("sweep (" + _why + "), " + roster.len() + " bros, " + def.stashItems().len() + " items in the stash");
@@ -235,4 +250,42 @@ def.sweep <- function (_why) {
         }
         if (!changed) break;
     }
+    return def.Changes;
+};
+
+// The K key: one sweep, refresh the character screen if it is open, then say what happened.
+def.kitUp <- function () {
+    local changes = def.sweep("hotkey");
+    if (changes == null) return;
+    // Re-open the character screen so it shows the new kit.
+    try {
+        local screen = ("CharacterScreen" in ::World.State.m) ? ::World.State.m.CharacterScreen : null;
+        if (screen != null && screen.isVisible() && ("toggleCharacterScreen" in ::World.State)) {
+            ::World.State.toggleCharacterScreen();
+            ::World.State.toggleCharacterScreen();
+        }
+    } catch (e) {
+        def.dbg("could not refresh the character screen: " + e);
+    }
+    local text;
+    if (changes.len() == 0) text = "Nothing to change: everybody has the best the stash can offer for his role.";
+    else {
+        text = "";
+        foreach (c in changes) text += c + "\n";
+    }
+    def.notify("Kit Pilot: " + changes.len() + " change" + (changes.len() == 1 ? "" : "s"), text);
+};
+
+// A popup through MSU when it has one; the log always has it.
+def.notify <- function (_title, _text) {
+    def.log(_title);
+    try {
+        if (("System" in ::MSU) && ("Popups" in ::MSU.System) && ("showRawTextPopup" in ::MSU.System.Popups)) {
+            ::MSU.System.Popups.showRawTextPopup(_title, _text);
+            return;
+        }
+    } catch (e) {
+        def.dbg("popup failed: " + e);
+    }
+    ::logInfo("kit pilot: " + _text);
 };
