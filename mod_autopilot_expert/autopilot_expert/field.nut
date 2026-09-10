@@ -35,6 +35,8 @@ def.scan <- function (_actor) {
         local allied = _actor.getFaction() == i || _actor.isAlliedWith(i);
         foreach (e in faction) {
             if (!isLive(e) || e.getID() == _actor.getID()) continue;
+            // Caravan hands, civilians, dogs still on the leash: not a threat, not a target.
+            if (("isNonCombatant" in e) && e.isNonCombatant()) continue;
             local d = myTile.getDistanceTo(e.getTile());
             local ranged = e.isArmedWithRangedWeapon();
             if (allied) {
@@ -48,6 +50,8 @@ def.scan <- function (_actor) {
                 if (d == 1) ret.adjacentAllies.push(e);
             } else {
                 ret.enemies.push(e);
+                // A fleeing enemy is neither coming for us nor shooting at us.
+                if (e.getMoraleState() == ::Const.MoraleState.Fleeing) continue;
                 if (ranged) ret.enemyRanged++;
                 if (d < ret.nearest) ret.nearest = d;
             }
