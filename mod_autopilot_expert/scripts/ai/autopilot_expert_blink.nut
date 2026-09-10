@@ -386,6 +386,12 @@ this.autopilot_expert_blink <- this.inherit("scripts/ai/tactical/behavior", {
         }
         skill.use(target);
         this.m.BlinkedThisTurn = true;
+        if (this.m.Mode == "escape" || this.m.Mode == "retreat") {
+            // Stay out: no walking back toward them with the AP that is left. The agent hook in
+            // profiles.nut keeps this in place if the agent's weights get rebuilt mid-turn.
+            this.getAgent().apx_stayOutRound <- ::AutopilotExpert.getRound();
+            this.getProperties().BehaviorMult[::Const.AI.Behavior.ID.EngageMelee] *= 0.05;
+        }
         if (!_entity.isHiddenToPlayer()) {
             this.getAgent().declareAction();
         }

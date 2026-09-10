@@ -254,27 +254,33 @@ def.onAgentUpdate <- function (_agent) {
         applyProps(props, Profiles[role], actor.getName());
     }
 
-    // Early-round line holding: wait for them to come, unless they outgun us at range.
-    if (("blinker" in mode) && mode.blinker) return;
-    if (!def.conf("holdline") || HoldRoles.find(role) == null) return;
     local round = def.getRound();
+
+    // A blinker who just blinked out of a fight stays out for the rest of that turn; otherwise
+    // the engage behavior walks him straight back in with whatever AP is left.
+    if (("blinker" in mode) && mode.blinker) {
+        if (("apx_stayOutRound" in _agent) && _agent.apx_stayOutRound == round) {
+            props.BehaviorMult[::Const.AI.Behavior.ID.EngageMelee] *= 0.05;
+        }
+        return;
+    }
+
+    // Early-round line holding: wait for them to come, unless they outgun us at range.
+    if (!def.conf("holdline") || HoldRoles.find(role) == null) return;
     local holding = false;
-    if (round <= def.conf("holdrounds") && !("apx_holdOff" in _agent)) {
+    if (round <= def.conf("holdrounds")) {
         local f = def.scan(actor);
         local outgunned = f.enemyRanged >= 2 && f.enemyRanged > f.allyRanged;
-        // Holding only pays if the enemy is actually coming. Remember the closest enemy distance
-        // per round; if a new round starts and they are no closer, stop holding for this battle.
-        if ("apx_hold" in _agent) {
-            local h = _agent.apx_hold;
-            if (round > h.round && f.nearest >= h.nearest) {
-                _agent.apx_holdOff <- true;
-                def.dbg(actor.getName() + " enemy is not approaching, holding is off");
-            }
-        }
+        // Holding only pays if the enemy is actually coming. Compare the closest enemy distance
+        // with the previous round's: closer means they are coming and we hold, otherwise we
+        // advance this round and check again next round.
         if (!("apx_hold" in _agent) || _agent.apx_hold.round != round) {
-            _agent.apx_hold <- {round = round, nearest = f.nearest};
+            local prev = ("apx_hold" in _agent) ? _agent.apx_hold : null;
+            local approaching = prev == null || f.nearest < prev.nearest;
+            _agent.apx_hold <- {round = round, nearest = f.nearest, approaching = approaching};
+            if (!approaching) def.dbg(actor.getName() + " enemy is not approaching, advancing this round");
         }
-        holding = f.nearest > 3 && !outgunned && !("apx_holdOff" in _agent);
+        holding = f.nearest > 3 && !outgunned && _agent.apx_hold.approaching;
         if (holding) {
             local id = ::Const.AI.Behavior.ID.EngageMelee;
             props.BehaviorMult[id] *= 0.2;
