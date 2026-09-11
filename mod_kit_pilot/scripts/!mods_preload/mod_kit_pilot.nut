@@ -1,11 +1,11 @@
-// Kit Pilot - equips the company from the stash. Press K on the world map (the character screen
-// may be open) for one sweep and a report of what moved to whom; optionally it also runs on its
-// own after battles and town visits. Uses the same equip / unequip functions the inventory
+// Kit Pilot - equips the company from the stash. The "Kit up" button on the character screen (or
+// K on a keyboard) runs one sweep and shows a report of what moved to whom; optionally it also
+// runs on its own after battles and town visits. Uses the same equip / unequip functions the inventory
 // screen uses; nothing is created or destroyed, items only move between the stash and the bros.
 local def = ::KitPilot <- {
     ID = "mod_kit_pilot"
     Name = "Kit Pilot"
-    Version = "1.1.0"
+    Version = "1.2.0"
     ManualMarker = "!"         // a bro whose name ends with this is left alone
     MaxPasses = 3              // sweep passes so hand-me-downs cascade to the next bro
     function dbg(_msg) {
@@ -29,10 +29,10 @@ mod.queue(">mod_legends", ">mod_msu", function () {
     page.addElement(::MSU.Class.BooleanSetting("equip", true, "Equip bros from the stash",
         "Fill empty weapon, shield, armor, helmet and quiver slots from the stash, by the bro's role. "
         + "Veterans are served first, so what they take off goes to the next bro down. "
-        + "Press K on the world map to run a sweep; a popup then lists every change."));
+        + "Run it with the Kit up button on the character screen (or K on a keyboard); a report then lists every change."));
     page.addElement(::MSU.Class.BooleanSetting("auto", false, "Also run automatically",
         "Run a sweep on its own after every battle and whenever the world map is shown again "
-        + "(leaving a town, closing an event). Off: only when you press K."));
+        + "(leaving a town, closing an event). Off: only when you press the button."));
     page.addElement(::MSU.Class.BooleanSetting("upgrade", true, "Upgrade worn gear",
         "Also replace a worn item with a clearly better one from the stash (about 15-20% better). "
         + "The old item goes back to the stash. Named items a bro already wears are never taken off him."));
@@ -52,6 +52,8 @@ mod.queue(">mod_legends", ">mod_msu", function () {
     ::include("kit_pilot/items");
     ::include("kit_pilot/core");
     ::include("kit_pilot/hooks");
+    ::Hooks.registerJS("ui/mods/kit_pilot.js");
+    ::Hooks.registerCSS("ui/mods/kit_pilot.css");
 
     ::logInfo("kit pilot: loaded " + def.Version);
 })

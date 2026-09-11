@@ -253,20 +253,43 @@ def.sweep <- function (_why) {
     return def.Changes;
 };
 
-// The K key: one sweep, refresh the character screen if it is open, then say what happened.
-def.kitUp <- function () {
-    local changes = def.sweep("hotkey");
-    if (changes == null) return;
-    // Re-open the character screen so it shows the new kit.
+// Re-open the character screen, if it is open, so it shows the new kit.
+def.refreshCharacterScreen <- function () {
     try {
-        local screen = ("CharacterScreen" in ::World.State.m) ? ::World.State.m.CharacterScreen : null;
-        if (screen != null && screen.isVisible() && ("toggleCharacterScreen" in ::World.State)) {
-            ::World.State.toggleCharacterScreen();
-            ::World.State.toggleCharacterScreen();
+        local ws = ::World.State;
+        local screen = ("CharacterScreen" in ws.m) ? ws.m.CharacterScreen : null;
+        if (screen == null || !screen.isVisible()) return;
+        if ("toggleCharacterScreen" in ws) {
+            ws.toggleCharacterScreen();
+            ws.toggleCharacterScreen();
+        } else {
+            screen.hide();
+            screen.show();
         }
     } catch (e) {
         def.dbg("could not refresh the character screen: " + e);
     }
+};
+
+// The Kit up button on the character screen: one sweep, refresh, and the change lines go back
+// to the screen, which shows them in its own panel.
+def.kitUpFromScreen <- function () {
+    local changes = null;
+    try {
+        changes = def.sweep("button");
+    } catch (e) {
+        ::logError("kit pilot: " + e);
+    }
+    if (changes == null) changes = [];
+    def.refreshCharacterScreen();
+    return changes;
+};
+
+// The K key: one sweep, refresh the character screen if it is open, then say what happened.
+def.kitUp <- function () {
+    local changes = def.sweep("hotkey");
+    if (changes == null) return;
+    def.refreshCharacterScreen();
     local text;
     if (changes.len() == 0) text = "Nothing to change: everybody has the best the stash can offer for his role.";
     else {

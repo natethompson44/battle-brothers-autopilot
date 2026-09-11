@@ -1,9 +1,10 @@
 # Kit Pilot
 
-Equips the company from the stash. Press **K** on the world map, with the character screen open
-or not, and it runs one sweep, refreshes the screen, and pops up a list of every change: who got
-what, what came off, and the numbers behind the choice. Optionally it also runs on its own after
-battles and town visits. Never during a fight. Items only move between the stash and the bros
+Equips the company from the stash. A **Kit up** button sits in the bottom-left corner of the
+character (inventory) screen; tap it and it runs one sweep, refreshes the screen, and opens a
+panel listing every change: who got what, what came off, and the numbers behind the choice. On a
+keyboard, **K** on the world map does the same. Optionally it also runs on its own after battles
+and town visits. Never during a fight. Items only move between the stash and the bros
 with the same equip and unequip calls the inventory screen uses, so nothing is created, destroyed
 or sold.
 
@@ -16,13 +17,13 @@ or sold.
 
 | Setting | Default | What it does |
 |---|---|---|
-| Equip bros from the stash | on | Fill empty weapon, shield, armor, helmet and quiver slots by role. Veterans (highest level) are served first, so what they take off goes down to the next bro. Press **K** on the world map to run it. |
-| Also run automatically | off | Run a sweep on its own after every battle and whenever the world map is shown again (leaving a town, closing an event). Off: only when you press K. |
+| Equip bros from the stash | on | Fill empty weapon, shield, armor, helmet and quiver slots by role. Veterans (highest level) are served first, so what they take off goes down to the next bro. Run it with the **Kit up** button on the character screen, or K on a keyboard. |
+| Also run automatically | off | Run a sweep on its own after every battle and whenever the world map is shown again (leaving a town, closing an event). Off: only when you press the button. |
 | Upgrade worn gear | on | Also replace a worn item with a clearly better one from the stash: about 20% more for weapons, 15% for shields and armor. The old item goes back to the stash. |
 | Unarmed recruits get a two-hander | off | A recruit with nothing in hand gets a one-hander and a shield. On, he gets a two-hander instead. Recruits with ranged talent get a bow or crossbow either way. |
 | Fatigue to keep after armor | 50 | Armor and helmets are only put on while the bro keeps at least this much maximum fatigue. Archers keep 10 more. Bros with Nimble stay under 15 fatigue of armor regardless. Brawny is accounted for. |
 | Leave my character manual | off | Never touch the player character's equipment. |
-| Debug logging | off | Also write every rejected candidate to `log.html` (why a bro kept what he has). Every change is always in the popup and logged as `kit pilot: <name>: <old> -> <new> (reason)`. |
+| Debug logging | off | Also write every rejected candidate to `log.html` (why a bro kept what he has). Every change is always in the report panel and logged as `kit pilot: <name>: <old> -> <new> (reason)`. |
 
 **Per-bro opt-out:** rename a bro so his name ends with `!` and he is left alone entirely.
 

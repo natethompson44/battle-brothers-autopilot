@@ -1,0 +1,63 @@
+.kit-pilot-hidden {
+    display: none !important;
+}
+
+.kit-pilot-button-container {
+    position: absolute;
+    left: 1.2rem;
+    bottom: 1.2rem;
+    z-index: 200;
+}
+
+.kit-pilot-button {
+    display: inline-block;
+    padding: 0.5rem 1.4rem;
+    background-color: rgba(28, 22, 14, 0.94);
+    border: 0.15rem solid #a8905c;
+    border-radius: 0.3rem;
+    color: #efe2b4;
+    font-size: 1.3rem;
+    text-align: center;
+    cursor: pointer;
+}
+
+.kit-pilot-button:hover {
+    background-color: rgba(60, 48, 26, 0.96);
+    color: #ffffff;
+}
+
+.kit-pilot-busy {
+    opacity: 0.5;
+}
+
+.kit-pilot-report {
+    position: absolute;
+    left: 50%;
+    top: 12%;
+    width: 64%;
+    max-height: 72%;
+    margin-left: -32%;
+    padding: 1.2rem 1.6rem;
+    overflow-y: auto;
+    background-color: rgba(14, 11, 7, 0.96);
+    border: 0.15rem solid #a8905c;
+    border-radius: 0.3rem;
+    color: #efe2b4;
+    z-index: 300;
+}
+
+.kit-pilot-report-title {
+    font-size: 1.6rem;
+    margin-bottom: 0.8rem;
+    color: #ffffff;
+}
+
+.kit-pilot-report-line {
+    font-size: 1.2rem;
+    line-height: 1.6rem;
+    margin-bottom: 0.3rem;
+}
+
+.kit-pilot-report-close {
+    margin-top: 1rem;
+}

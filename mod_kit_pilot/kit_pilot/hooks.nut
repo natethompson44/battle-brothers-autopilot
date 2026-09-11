@@ -3,6 +3,13 @@ local mod = def.mh;
 
 local KEY_K = 21;   // the game's key codes: A = 11 ... K = 21 (Autopilot New uses the same table)
 
+// The Kit up button (ui/mods/kit_pilot.js) calls this and shows the lines it returns.
+mod.hook("scripts/ui/screens/character/character_screen", function (q) {
+    q.onKitPilot <- function (_data = null) {
+        return def.kitUpFromScreen();
+    }
+})
+
 mod.hook("scripts/states/world_state", function (q) {
     // K on the world map, character screen open or not: one sweep, then a report.
     q.onKeyInput = @(__original) function (_key) {
