@@ -25,6 +25,25 @@ to the stock ones. Vanilla only for now.
 Same avatar, four hunters instead of a line: two archers, a beast hunter with spear and shield, a
 houndmaster with two dogs. 1200 crowns.
 
+## The Sworn Five (difficulty: medium)
+
+Five friends whose builds lean on each other. Everyone carries the **Sworn** trait: +2 action
+points, +10 initiative, +10 resolve, +3 fatigue recovery.
+
+- **Sable the Knife**, your avatar. Assassin, level 5, named qatal dagger, black leather armor,
+  and nine perks in place (Dagger Mastery, Backstabber, Dodge, Nimble, Duelist, Overwhelm,
+  Footwork, Relentless, Killing Frenzy). The **Knife in the Dark** trait adds one more action
+  point, +25 initiative, +10 melee skill, +10 melee and ranged defense, +15 hitpoints.
+- **Wren and Rook**, twin hunters. War bow and quiver each, light lamellar, Bow Mastery for both,
+  Bullseye on one and Overwhelm on the other.
+- **Halvard Longarm**, sellsword with a named spear, heater shield and medium mail. Spear Mastery
+  and Fast Adaption.
+- **Bram the Wall**, retired soldier in a coat of scales with sword and kite shield. Taunt, Shield
+  Expert and Rally the Troops: he draws the blows and steadies the others.
+- 2000 crowns, full supplies, spare quivers, and two treasures to sell.
+
+Without the Blazing Deserts content Sable is a killer-on-the-run with a named dagger instead.
+
 ## Notes
 
 - Rename Wolfeo in the character screen if you like; nothing depends on the name.

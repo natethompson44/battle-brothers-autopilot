@@ -4,7 +4,7 @@
 local def = ::WolfeoStarts <- {
     ID = "mod_company_starts"
     Name = "Company Starts"
-    Version = "1.0.2"
+    Version = "1.1.0"
 }
 ::Hooks.register(def.ID, def.Version, def.Name);
 
@@ -164,6 +164,59 @@ def.makeWolfeo <- function (_scenario, _bro) {
     _bro.m.PerkPointsSpent = 11;
     _bro.setPlaceInFormation(4);
     _bro.getSkills().update();
+}
+
+// True when the Blazing Deserts content is available (assassin background, qatal dagger).
+def.hasDesert <- function () {
+    return ("DLC" in ::Const) && ("Desert" in ::Const.DLC) && ::Const.DLC.Desert == true;
+}
+
+// A fully specified roster member. _spec fields (all optional except talents):
+//   weapon, offhand, body, head, ammo, accessory   item script paths
+//   bag                                            array of item script paths
+//   talents / stars                                attribute names and star counts
+//   bump                                           base property increments (Stamina, not Fatigue)
+//   perks                                          perk script names granted outright
+//   level / points                                 level and perk points left to spend
+//   traits                                         trait script paths added on top
+def.makeMember <- function (_scenario, _roster, _background, _name, _title, _spec, _slot) {
+    local bro = def.makeBro(_scenario, _roster, _background, _name, _title);
+    local items = bro.getItems();
+    foreach (slot in [::Const.ItemSlot.Mainhand, ::Const.ItemSlot.Offhand, ::Const.ItemSlot.Body, ::Const.ItemSlot.Head, ::Const.ItemSlot.Accessory, ::Const.ItemSlot.Ammo]) {
+        local old = items.getItemAtSlot(slot);
+        if (old != null) {
+            items.unequip(old);
+            ::World.Assets.getStash().add(old);
+        }
+    }
+    foreach (k in ["weapon", "offhand", "body", "head", "ammo", "accessory"]) {
+        if (k in _spec && _spec[k] != null) items.equip(::new(_spec[k]));
+    }
+    if ("bag" in _spec) foreach (b in _spec.bag) items.addToBag(::new(b));
+
+    if ("bump" in _spec) {
+        local b = bro.getBaseProperties();
+        foreach (k, v in _spec.bump) {
+            if (k in b) b[k] += v;
+        }
+    }
+    setTalents(bro, _spec.talents, ("stars" in _spec) ? _spec.stars : [3, 2, 2]);
+
+    local perks = ("perks" in _spec) ? _spec.perks : [];
+    foreach (p in perks) bro.getSkills().add(::new("scripts/skills/perks/" + p));
+    setLevel(bro, ("level" in _spec) ? _spec.level : 4, ("points" in _spec) ? _spec.points : 2);
+    bro.m.PerkPointsSpent = perks.len();
+
+    if ("traits" in _spec) foreach (t in _spec.traits) bro.getSkills().add(::new(t));
+    bro.setPlaceInFormation(_slot);
+    bro.getSkills().update();
+    return bro;
+}
+
+// Turn a roster member into the player's avatar.
+def.makeAvatar <- function (_bro) {
+    _bro.getFlags().set("IsPlayerCharacter", true);
+    _bro.getSkills().add(::new("scripts/skills/traits/player_character_trait"));
 }
 
 // Spawn on a road tile next to a decent village. Same approach as the stock scenarios.
